@@ -1,0 +1,35 @@
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+
+  <body>
+    <%- include("./partials/nav.ejs") %>
+
+    <div class="details content">
+      <h2><%= blog.title %></h2>
+      <div class="content">
+        <p><%= blog.body %></p>
+      </div>
+      <!-- data attribute is a special attribite in css which helps us to add our own attribute -->
+      <a class="delete" data-doc="<%= blog._id %>">delete</a>
+    </div>
+
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+      const trashcan = document.querySelector("a.delete");
+
+      trashcan.addEventListener("click", (e) => {
+        //   to access the data attribute from the html we need to use the dataset property in js there is .doc because our attribute name is data-"doc"
+
+        const endpoint = `/blogs/${trashcan.dataset.doc}`;
+
+        fetch(endpoint, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((data) => (window.location.href = data.redirect))
+          .catch((err) => console.log(err));
+      });
+    </script>
+  </body>
+</html>
